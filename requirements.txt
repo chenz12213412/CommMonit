@@ -1,0 +1,6 @@
+PySide6>=6.8,<7
+frida>=16.5,<18
+psutil>=6,<8
+pyserial>=3.5,<4
+pyinstaller>=6.10,<7
+
