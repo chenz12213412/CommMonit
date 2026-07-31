@@ -11,10 +11,16 @@ if (-not (Test-Path -LiteralPath $Python)) {
 & $Python (Join-Path $ProjectRoot "tools\make_icon.py")
 & $Python -m unittest discover -s (Join-Path $ProjectRoot "tests") -v
 & $Python -m PyInstaller --noconfirm --clean (Join-Path $ProjectRoot "CommMonit.spec")
+& $Python -m PyInstaller --noconfirm --clean (Join-Path $ProjectRoot "CommMonit-folder.spec")
 
-$Output = Join-Path $ProjectRoot "dist\CommMonit.exe"
-if (-not (Test-Path -LiteralPath $Output)) {
-    throw "Build finished without creating $Output"
+$SingleFileOutput = Join-Path $ProjectRoot "dist\CommMonit.exe"
+$FolderOutput = Join-Path $ProjectRoot "dist\CommMonit-folder\CommMonit.exe"
+if (-not (Test-Path -LiteralPath $SingleFileOutput)) {
+    throw "Build finished without creating $SingleFileOutput"
+}
+if (-not (Test-Path -LiteralPath $FolderOutput)) {
+    throw "Build finished without creating $FolderOutput"
 }
 
-Write-Host "Built: $Output"
+Write-Host "Single-file build: $SingleFileOutput"
+Write-Host "Folder build:      $FolderOutput"

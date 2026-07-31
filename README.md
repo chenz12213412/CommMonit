@@ -54,4 +54,9 @@ python main.py --demo
 .\build.ps1
 ```
 
-输出位于 `dist\CommMonit.exe`。
+一次构建会生成两种版本：
+
+- 单文件版：`dist\CommMonit.exe`
+- 目录版：`dist\CommMonit-folder\CommMonit.exe`
+
+单文件版方便复制；目录版需要保留整个 `CommMonit-folder` 文件夹，启动通常更快。
