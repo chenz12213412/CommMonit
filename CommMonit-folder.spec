@@ -38,6 +38,7 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon=["assets/commmonit.ico"],
+    version="tools/generated/commmonit-version.txt",
     uac_admin=True,
 )
 

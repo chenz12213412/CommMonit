@@ -6,3 +6,4 @@ dist/
 artifacts/
 assets/commmonit.ico
 .worktrees/
+tools/generated/
