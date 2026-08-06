@@ -18,8 +18,14 @@ $Remotes = @("origin", "gitee")
 
 function Invoke-Git {
     param([Parameter(Mandatory = $true)][string[]]$Arguments)
-    & git @Arguments
-    if ($LASTEXITCODE -ne 0) {
+
+    $PreviousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    $Output = & git @Arguments 2>&1
+    $ExitCode = $LASTEXITCODE
+    $ErrorActionPreference = $PreviousErrorActionPreference
+    $Output | Write-Host
+    if ($ExitCode -ne 0) {
         throw "Git 命令失败：git $($Arguments -join ' ')"
     }
 }
