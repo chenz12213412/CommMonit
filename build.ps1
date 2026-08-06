@@ -14,7 +14,10 @@ function Invoke-CheckedCommand {
         [Parameter(Mandatory = $true)][string[]]$Arguments
     )
 
+    $PreviousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
     $Output = & $FilePath @Arguments 2>&1
+    $ErrorActionPreference = $PreviousErrorActionPreference
     $Output | Write-Host
     if ($LASTEXITCODE -ne 0) {
         throw "命令执行失败：$FilePath $($Arguments -join ' ')"
