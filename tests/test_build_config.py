@@ -15,7 +15,7 @@ class BuildConfigTests(unittest.TestCase):
     def test_build_generates_version_resource_before_tests(self):
         content = (ROOT / "build.ps1").read_text(encoding="utf-8")
         generator = content.index("tools\\make_version_info.py")
-        tests = content.index("-m unittest discover")
+        tests = content.index('"unittest", "discover"')
         self.assertLess(generator, tests)
 
 

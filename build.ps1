@@ -8,20 +8,44 @@ if ([string]::IsNullOrWhiteSpace($ScriptPath)) {
 }
 $Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
 
-if (-not (Test-Path -LiteralPath $Python)) {
-    & "C:\Program Files\Python313\python.exe" -m venv (Join-Path $ProjectRoot ".venv") 2>&1 | Out-Host
+function Invoke-CheckedCommand {
+    param(
+        [Parameter(Mandatory = $true)][string]$FilePath,
+        [Parameter(Mandatory = $true)][string[]]$Arguments
+    )
+
+    $Output = & $FilePath @Arguments 2>&1
+    $Output | Write-Host
+    if ($LASTEXITCODE -ne 0) {
+        throw "命令执行失败：$FilePath $($Arguments -join ' ')"
+    }
 }
 
-& $Python -m pip install --disable-pip-version-check -r (Join-Path $ProjectRoot "requirements.txt") 2>&1 | Out-Host
-& $Python (Join-Path $ProjectRoot "tools\make_icon.py") 2>&1 | Out-Host
-& $Python (Join-Path $ProjectRoot "tools\make_version_info.py") 2>&1 | Out-Host
+if (-not (Test-Path -LiteralPath $Python)) {
+    Invoke-CheckedCommand -FilePath "C:\Program Files\Python313\python.exe" -Arguments @(
+        "-m", "venv", (Join-Path $ProjectRoot ".venv")
+    )
+}
+
+Invoke-CheckedCommand -FilePath $Python -Arguments @(
+    "-m", "pip", "install", "--disable-pip-version-check", "-r",
+    (Join-Path $ProjectRoot "requirements.txt")
+)
+Invoke-CheckedCommand -FilePath $Python -Arguments @((Join-Path $ProjectRoot "tools\make_icon.py"))
+Invoke-CheckedCommand -FilePath $Python -Arguments @((Join-Path $ProjectRoot "tools\make_version_info.py"))
 $VersionResource = Join-Path $ProjectRoot "tools\generated\commmonit-version.txt"
 if (-not (Test-Path -LiteralPath $VersionResource)) {
     throw "未生成 Windows 版本资源：$VersionResource"
 }
-& $Python -m unittest discover -s (Join-Path $ProjectRoot "tests") -q 2>&1 | Out-Host
-& $Python -m PyInstaller --noconfirm --clean (Join-Path $ProjectRoot "CommMonit.spec") 2>&1 | Out-Host
-& $Python -m PyInstaller --noconfirm --clean (Join-Path $ProjectRoot "CommMonit-folder.spec") 2>&1 | Out-Host
+Invoke-CheckedCommand -FilePath $Python -Arguments @(
+    "-m", "unittest", "discover", "-s", (Join-Path $ProjectRoot "tests"), "-q"
+)
+Invoke-CheckedCommand -FilePath $Python -Arguments @(
+    "-m", "PyInstaller", "--noconfirm", "--clean", (Join-Path $ProjectRoot "CommMonit.spec")
+)
+Invoke-CheckedCommand -FilePath $Python -Arguments @(
+    "-m", "PyInstaller", "--noconfirm", "--clean", (Join-Path $ProjectRoot "CommMonit-folder.spec")
+)
 
 $SingleFileOutput = Join-Path $ProjectRoot "dist\CommMonit.exe"
 $FolderOutput = Join-Path $ProjectRoot "dist\CommMonit-folder\CommMonit.exe"
