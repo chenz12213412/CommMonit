@@ -1,6 +1,7 @@
 import importlib
 import os
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -12,6 +13,8 @@ from PySide6.QtWidgets import QApplication
 from app.ui import MainWindow
 from app.version import APP_VERSION, FILE_DESCRIPTION, PRODUCT_NAME, VERSION_TAG, WINDOWS_VERSION
 from main import configure_application
+
+ROOT = Path(__file__).resolve().parent.parent
 
 
 class VersionMetadataTests(unittest.TestCase):
@@ -45,6 +48,10 @@ class VersionMetadataTests(unittest.TestCase):
         self.assertEqual(self.qt_app.applicationVersion(), APP_VERSION)
         self.assertIn(VERSION_TAG, window.windowTitle())
         self.assertIn(FILE_DESCRIPTION, window.windowTitle())
+
+    def test_changelog_contains_current_release(self):
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.assertIn(f"## [{APP_VERSION}] - 2026-08-06", changelog)
 
 
 if __name__ == "__main__":

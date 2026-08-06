@@ -60,3 +60,15 @@ python main.py --demo
 - 目录版：`dist\CommMonit-folder\CommMonit.exe`
 
 单文件版方便复制；目录版需要保留整个 `CommMonit-folder` 文件夹，启动通常更快。
+
+## 版本管理与发布
+
+当前版本：`v1.0.0`。
+
+版本号遵循 `主版本.次版本.修订版本`。正式发布前必须更新 `app/version.py` 和 `CHANGELOG.md`，再运行：
+
+```powershell
+.\release.ps1 -Version 1.0.0
+```
+
+发布脚本会验证版本、运行测试、构建两种 EXE，并将 `main` 和版本标签同步到 GitHub 与 Gitee。
