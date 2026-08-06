@@ -1,8 +1,10 @@
 $ErrorActionPreference = "Stop"
 
-$ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-if ([string]::IsNullOrWhiteSpace($ProjectRoot)) {
+$ScriptPath = $MyInvocation.MyCommand.Path
+if ([string]::IsNullOrWhiteSpace($ScriptPath)) {
     $ProjectRoot = (Get-Location).Path
+} else {
+    $ProjectRoot = Split-Path -Parent $ScriptPath
 }
 $Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
 
