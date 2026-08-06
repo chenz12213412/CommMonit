@@ -53,7 +53,12 @@ try {
         throw "标签已存在：$Tag"
     }
 
-    & (Join-Path $ProjectRoot "build.ps1")
+    $BuildPath = Join-Path $ProjectRoot "build.ps1"
+    $BuildText = [System.IO.File]::ReadAllText($BuildPath, (New-Object System.Text.UTF8Encoding($false)))
+    & ([scriptblock]::Create($BuildText))
+    if ($LASTEXITCODE -ne 0) {
+        throw "构建失败。"
+    }
 
     foreach ($Remote in $Remotes) {
         Invoke-Git -Arguments @("push", $Remote, "main")
