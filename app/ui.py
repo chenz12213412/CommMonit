@@ -44,6 +44,7 @@ from PySide6.QtWidgets import (
 )
 
 from .capture import CaptureController, resource_path
+from .version import FILE_DESCRIPTION, VERSION_TAG
 from .formatters import CaptureEvent, export_csv, export_json, format_ascii, format_hex, format_size
 from .processes import ProcessInfo, list_processes, list_serial_ports, system_summary
 from .styles import palette_for_theme
@@ -196,7 +197,7 @@ class MainWindow(QMainWindow):
         self._tx_bytes = 0
         self._target_name = ""
 
-        self.setWindowTitle("CommMonit · 串口旁路监控")
+        self.setWindowTitle(f"CommMonit {VERSION_TAG} · {FILE_DESCRIPTION}")
         self.setMinimumSize(1120, 720)
         self.resize(1420, 880)
         self.setWindowIcon(QIcon(str(resource_path("assets/logo.svg"))))

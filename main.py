@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.styles import APP_STYLESHEET, palette_for_theme
 from app.ui import MainWindow
+from app.version import APP_VERSION
 
 
 def parse_args() -> argparse.Namespace:
@@ -19,17 +20,22 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def configure_application(app: QApplication, theme: str) -> None:
+    app.setApplicationName("CommMonit")
+    app.setApplicationVersion(APP_VERSION)
+    app.setOrganizationName("CommMonit")
+    app.setStyle("Fusion")
+    app.setPalette(palette_for_theme(theme))
+    app.setStyleSheet(APP_STYLESHEET)
+
+
 def main() -> int:
     args = parse_args()
     app = QApplication(sys.argv[:1])
-    app.setApplicationName("CommMonit")
-    app.setOrganizationName("CommMonit")
-    app.setStyle("Fusion")
     theme = str(QSettings("CommMonit", "CommMonit").value("theme", "dark"))
     if theme not in ("dark", "light"):
         theme = "dark"
-    app.setPalette(palette_for_theme(theme))
-    app.setStyleSheet(APP_STYLESHEET)
+    configure_application(app, theme)
 
     window = MainWindow(demo=args.demo or bool(args.screenshot), theme=theme)
     window.show()
