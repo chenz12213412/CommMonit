@@ -68,7 +68,7 @@ python main.py --demo
 版本号遵循 `主版本.次版本.修订版本`。正式发布前必须更新 `app/version.py` 和 `CHANGELOG.md`，再运行：
 
 ```powershell
-.\release.ps1 -Version 1.0.0
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\run-release.ps1 -Version 1.0.0
 ```
 
 发布脚本会验证版本、运行测试、构建两种 EXE，并将 `main` 和版本标签同步到 GitHub 与 Gitee。
