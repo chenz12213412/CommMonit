@@ -19,7 +19,7 @@ $VersionResource = Join-Path $ProjectRoot "tools\generated\commmonit-version.txt
 if (-not (Test-Path -LiteralPath $VersionResource)) {
     throw "未生成 Windows 版本资源：$VersionResource"
 }
-& $Python -m unittest discover -s (Join-Path $ProjectRoot "tests") -v
+& $Python -m unittest discover -s (Join-Path $ProjectRoot "tests") -q
 & $Python -m PyInstaller --noconfirm --clean (Join-Path $ProjectRoot "CommMonit.spec")
 & $Python -m PyInstaller --noconfirm --clean (Join-Path $ProjectRoot "CommMonit-folder.spec")
 
