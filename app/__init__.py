@@ -1,4 +1,6 @@
 """CommMonit application package."""
 
-__version__ = "1.0.0"
+from app.version import APP_VERSION
+
+__version__ = APP_VERSION
 
